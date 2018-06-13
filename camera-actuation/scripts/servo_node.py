@@ -10,10 +10,5 @@ dc_max = 0.1
 scale_servo_range = 0.9
 computer = 'nanopi'
 
-servo = Servo(pwm_pin, pwm_frequency, dc_min,
-              dc_max, scale_servo_range, computer)
-
-servo.enable()
-servo.set_position(0)
-while True:
-    pass
+servo = ServoInterface()
+servo.spin()
