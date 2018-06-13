@@ -26,7 +26,7 @@ class ServoInterface(object):
         self.is_initialized = False
         rospy.init_node('servo_interface', anonymous=False)
         self.sub = rospy.Subscriber(
-            'camera_direction', CameraDirection, self.callback)
+            'camera_direction', std_msgs.msg.Float64, self.callback)
 
         rospy.on_shutdown(self.shutdown)
 
@@ -71,7 +71,7 @@ class ServoInterface(object):
         if not healthy_message(msg):
             return
 
-        self.tilt_position = msg.camera_tilt
+        self.tilt_position = msg.data
 
 
 if __name__ == '__main__':
