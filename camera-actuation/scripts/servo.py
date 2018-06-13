@@ -20,7 +20,7 @@ class Servo:
         self.pwm_pin = pwm_pin
         self.pwm_frequency = pwm_frequency
         self.duty_cycle_min = duty_cycle_min
-        self.duty_cylce_max = duty_cycle_max
+        self.duty_cycle_max = duty_cycle_max
         self.scale_range = clip(scale_range, 0, 1)
 
         self.GPIO.setmode(GPIO.BOARD)
@@ -32,14 +32,14 @@ class Servo:
     def set_position(self, position):
         # Set servo position
         if abs(position) <= 1:
-            self.pwm.ChangeDutyCycle(self.position_to_dc(position)*100)
+            self.pwm.ChangeDutyCycle(self.position_to_duty_cycle(position)*100)
             time.sleep(0.1)
             self.pwm.ChangeDutyCycle(0)
         else:
             print 'Servo position out of range, ignoring'
 
     def enable(self):
-        self.pwm.start(self.position_to_dc(0))
+        self.pwm.start(self.position_to_duty_cycle(0))
 
     def disable(self):
         if self.computer == 'nanopi':
@@ -55,4 +55,4 @@ class Servo:
     def position_to_duty_cycle(self, position):
         # transform position [-1, 1] to a scaled duty cycle [duty_cycle_min, duty_cycle_max]
         return ((self.duty_cycle_max - self.duty_cycle_min) *
-                (position*(self.scale_range) + 1)/2 + self.dc_min)
+                (position*(self.scale_range) + 1)/2 + self.duty_cycle_min)
