@@ -17,6 +17,3 @@ servo.enable()
 servo.set_position(0)
 while True:
     pass
-    position = input("Input servo position[-1, 1])
-    servo.set_position(position)
-    print "set servo to position", position
