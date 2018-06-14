@@ -2,6 +2,7 @@ tilt_servo:
   type: 'sg90'
   duty_cycle_min: 0.05
   duty_cycle_max: 0.1
+  scale_range: 0.9
   pwm:
     frequency: 50
     pin: 12
