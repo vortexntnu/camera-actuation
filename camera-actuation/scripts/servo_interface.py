@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 
 import rospy
+import std_msgs.msg
 
-from vortex_msgs.msg import CameraPosition
 from servo import Servo
 
 COMPUTER = rospy.get_param('/computer')
 
-PWM_FREQENCY = rospy.get_param('/tilt_servo/steps_per_rev')
+PWM_FREQUENCY = rospy.get_param('/tilt_servo/pwm/frequency')
 SERVO_PWM_PIN = rospy.get_param('/tilt_servo/pwm/pin')
 DUTY_CYCLE_MIN = rospy.get_param('/tilt_servo/duty_cycle_min')
 DUTY_CYCLE_MAX = rospy.get_param('/tilt_servo/duty_cycle_max')
+SCALE_RANGE = rospy.get_param('/tilt_servo/scale_range')
 
 
 def healthy_message(msg):
-    if abs(msg.camera_tilt) > 1:
+    if abs(msg.data) > 1:
         rospy.logwarn_throttle(
             1, 'Camera servo position out of range. Ignoring message...')
         return False
@@ -26,7 +27,7 @@ class ServoInterface(object):
         self.is_initialized = False
         rospy.init_node('servo_interface', anonymous=False)
         self.sub = rospy.Subscriber(
-            'camera_direction', std_msgs.msg.Float64, self.callback)
+            'camera_position', std_msgs.msg.Float64, self.callback)
 
         rospy.on_shutdown(self.shutdown)
 
@@ -42,8 +43,11 @@ class ServoInterface(object):
             rospy.logfatal('Could not initialize servo.py. Is /computer parameter set correctly? '
                            'Shutting down node...')
             rospy.signal_shutdown('')
+        except:
+            rospy.logfatal("Unexpected error:", sys.exc_info()[0])
+            raise
 
-        self.tilt_servo.set_position(tilt_position)
+        self.tilt_servo.set_position(self.tilt_position)
         rospy.loginfo('Initialized camera tilt servo in neutral position.')
         self.is_initialized = True
         self.spin()
@@ -52,11 +56,11 @@ class ServoInterface(object):
         rate = rospy.Rate(PWM_FREQUENCY)
 
         while not rospy.is_shutdown():
-            tilt_servo_position = tilt_servo_position + \
-                tilt_servo_resolution * tilt_servo_direction
+#            tilt_position = tilt_position + \
+#                tilt_servo_resolution * tilt_servo_direction
             # Move servo if nonzero direction
-            if abs(self.tilt_servo_direction) == 1:
-                self.tilt_servo.set_position(tilt_position)
+#            if abs(self.tilt_servo_direction) == 1:
+#                self.tilt_servo.set_position(tilt_position)
 
             rate.sleep()
 
@@ -72,6 +76,7 @@ class ServoInterface(object):
             return
 
         self.tilt_position = msg.data
+        self.tilt_servo.set_position(msg.data)
 
 
 if __name__ == '__main__':
