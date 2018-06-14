@@ -1,6 +1,8 @@
 <launch>
 
+  <rosparam command="load" file="$(find camera-actuation)/config/nanopi.yaml"/>
+
   <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${time}] [${node}]: ${message}" />
-  <node name="camera_tilt" pkg="camera-actuation" type="servo_node.py" output="screen" />
+  <node name="camera_tilt" pkg="camera-actuation" type="servo_interface.py" output="screen" />
 
 </launch>
