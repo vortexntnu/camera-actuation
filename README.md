@@ -1,2 +1,2 @@
 # camera-control
-Software for camera tilt control, adjusting white balance, etc. 
+Software for camera tilt control
