@@ -1,5 +1,0 @@
-- git:
-    local-name: sr_common
-    uri: https://github.com/vortexntnu/camera-actuation.git
-    version: kinetic-devel
-
