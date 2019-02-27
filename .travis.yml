@@ -85,7 +85,6 @@ install:
   - catkin init
   # Create the devel/setup.bash (run catkin_make with an empty workspace) and
   # source it to set the path variables.
-  - source devel/setup.bash
   # Add the package under integration to the workspace using a symlink.
   - cd ~/catkin_ws/src
   - ln -s $CI_SOURCE_PATH .
